@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.msj.product.mapper.ProductCustomMapper">
+  <resultMap id="BaseResultMap" type="com.msj.common.entity.Product">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="discount_price" jdbcType="DECIMAL" property="discountPrice" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap id="ProductCustomMap" type="com.msj.common.pojo.ProductCustom">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="back_user_id" jdbcType="INTEGER" property="backUserId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="discount_price" jdbcType="DECIMAL" property="discountPrice" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="INTEGER" property="productStatus" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap id="ProductDtoMap" type="com.msj.common.dto.ProductDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="discount_price" jdbcType="DECIMAL" property="discountPrice" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+  </resultMap>
+  <resultMap id="ProductDetailMap" type="com.msj.common.dto.ProductDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
+    <result column="discount_price" jdbcType="DECIMAL" property="discountPrice" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="images" ofType="java.lang.String">
+      <result column="image"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, url, back_user_id, name, description, image, price, original_price, discount_price, 
+    stock, brand, status, gmt_create, gmt_modified, remark
+  </sql>
+  <sql id="product_where">
+    <if test="backUserId!=null and backUserId!=''">
+      AND back_user_id=#{backUserId}
+    </if>
+    <if test="name!=null and name!=''">
+      AND name like concat('%',#{name},'%')
+    </if>
+  </sql>
+  <select id="queryByUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM product
+    WHERE url=#{url}
+  </select>
+  <insert id="insertSelective" parameterType="com.msj.common.entity.Product">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="backUserId != null">
+        back_user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="originalPrice != null">
+        original_price,
+      </if>
+      <if test="discountPrice != null">
+        discount_price,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="backUserId != null">
+        #{backUserId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null">
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountPrice != null">
+        #{discountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="queryProduct" parameterType="com.msj.common.entity.Product" resultMap="ProductCustomMap">
+    SELECT 
+      <include refid="Base_Column_List"/>
+    FROM product
+    <where>
+      <include refid="product_where"/>
+    </where>
+  </select>
+  <select id="queryProductById" parameterType="java.lang.Integer" resultType="com.msj.common.entity.Product">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM product
+    WHERE id=#{id}
+  </select>
+  <select id="queryProductByCategoryId" resultMap="ProductDtoMap">
+    SELECT p.id,p.image,p.name,p.description,p.price,p.discount_price,p.original_price
+    FROM product p
+    LEFT JOIN product_category prc ON p.id=prc.product_id
+    LEFT JOIN p_category pc ON prc.category_id=pc.id
+    LEFT JOIN p_category pca ON pc.fid=pca.id
+    WHERE pc.id=#{categoryId} AND p.status=#{status}
+    UNION ALL
+    SELECT p.id,p.image,p.name,p.description,p.price,p.discount_price,p.original_price
+    FROM product p
+    LEFT JOIN product_category prc ON p.id=prc.product_id
+    LEFT JOIN p_category pc ON prc.category_id=pc.id
+    LEFT JOIN p_category pca ON pc.fid=pca.id
+    WHERE pc.fid=#{categoryId} AND p.status=#{status}
+    UNION ALL
+    SELECT p.id,p.image,p.name,p.description,p.price,p.discount_price,p.original_price
+    FROM product p
+    LEFT JOIN product_category prc ON p.id=prc.product_id
+    LEFT JOIN p_category pc ON prc.category_id=pc.id
+    LEFT JOIN p_category pca ON pc.fid=pca.id
+    WHERE pca.fid=#{categoryId} AND p.status=#{status}
+  </select>
+  <select id="searchProduct" resultMap="ProductDtoMap">
+    SELECT p.id,p.image,p.name,p.description,p.price,p.discount_price,p.original_price
+    FROM product p
+    WHERE status=#{status} AND (name like concat('%',#{keyword},'%') or brand like concat('%',#{keyword},'%'))
+  </select>
+  <select id="queryProductDetail" resultMap="ProductDetailMap">
+    SELECT p.id,name,description,pi.image,price,original_price,discount_price,stock,brand,remark
+    FROM product p
+    LEFT JOIN product_image pi ON p.id=pi.product_id
+    WHERE p.id=#{id}
+  </select>
+  <select id="queryProductShoppingCart" resultMap="ProductDtoMap">
+    SELECT id,name,description,image,price,original_price,discount_price,status,stock
+    FROM product
+    WHERE id in
+    <foreach collection="idList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
+  <select id="queryProductStock" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT stock
+    FROM product
+    WHERE id=#{id}
+  </select>
+</mapper>

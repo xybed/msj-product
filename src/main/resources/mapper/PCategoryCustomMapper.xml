@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.msj.product.mapper.PCategoryCustomMapper">
+  <resultMap id="BaseResultMap" type="com.msj.common.entity.PCategory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="classification" jdbcType="INTEGER" property="classification" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, level, fid, name, classification
+  </sql>
+  <insert id="batchInsert">
+    INSERT INTO p_category(level, fid, name) VALUES
+      <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.level}, #{item.fid}, #{item.name})
+      </foreach>
+  </insert>
+  <select id="queryByLevel" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM p_category
+    WHERE level=#{level}
+  </select>
+  <select id="queryByFid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM p_category
+    WHERE fid=#{fid}
+  </select>
+</mapper>
