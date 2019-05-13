@@ -1,0 +1,14 @@
+version: '3'
+services:
+    msj-product:
+        container_name: msj-product
+        image: msj-product:prod
+        ports:
+            - "9103:9103"
+        restart: always
+        networks:
+            - default
+            - app_net
+networks: 
+    app_net:
+        external: true
